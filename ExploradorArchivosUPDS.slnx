@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ExploradorArchivos.Core/ExploradorArchivos.Core.csproj" />
+  <Project Path="ExploradorArchivos.UI/ExploradorArchivos.UI.csproj" />
+  <Project Path="ExploradorArchivos.ViewModels/ExploradorArchivos.ViewModels.csproj" />
+</Solution>

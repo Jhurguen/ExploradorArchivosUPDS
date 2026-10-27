@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Colores Globales -->
+    <SolidColorBrush x:Key="ColorPrimarioBrush" Color="#007ACC"/>
+    <SolidColorBrush x:Key="ColorFondoBrush" Color="#F3F3F3"/>
+    <SolidColorBrush x:Key="ColorTextoBrush" Color="#222222"/>
+
+    <!-- Estilo base para Botones -->
+    <Style TargetType="Button">
+        <Setter Property="Background" Value="#E1E1E1"/>
+        <Setter Property="Foreground" Value="{StaticResource ColorTextoBrush}"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="1" 
+                            CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

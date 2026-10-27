@@ -1,0 +1,92 @@
+﻿<Window x:Class="ExploradorArchivos.UI.Vistas.VentanaPrincipal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ExploradorArchivos.ViewModels;assembly=ExploradorArchivos.ViewModels"
+        mc:Ignorable="d"
+        Title="Explorador de Archivos UPDS" Height="600" Width="950"
+        WindowStartupLocation="CenterScreen"
+        x:Name="VentanaRaiz">
+
+    <!-- Conectamos el DataContext al ViewModel principal -->
+    <Window.DataContext>
+        <vm:VentanaPrincipalViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Recursos/EstilosGlobales.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. BARRA DE NAVEGACIÓN (Botones y Ruta) -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content=" ⬅ Atrás " Command="{Binding AtrasComando}"/>
+            <Button Content=" ➡ Adelante " Command="{Binding AdelanteComando}" Margin="5,0,0,0"/>
+            <TextBlock Text=" Ruta: " VerticalAlignment="Center" FontWeight="Bold" Margin="10,0,0,0"/>
+            <TextBox Text="{Binding RutaActual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Width="550" VerticalContentAlignment="Center" Margin="5,0,0,0" IsReadOnly="True"/>
+            </StackPanel>
+
+        <!-- 2. UNIDADES DISPONIBLES (Discos del sistema) -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding UnidadesDisponibles}" Margin="0,0,0,10">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Nombre}" 
+                            Command="{Binding ElementName=VentanaRaiz, Path=DataContext.NavegarComando}" 
+                            CommandParameter="{Binding RutaAbsoluta}" 
+                            Width="70" Margin="0,0,5,0" FontWeight="Bold"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- 2b. ACCIONES SOBRE ARCHIVOS Y CARPETAS -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Nombre:" VerticalAlignment="Center" FontWeight="Bold"/>
+            <TextBox Text="{Binding NombreNuevoElemento, UpdateSourceTrigger=PropertyChanged}" Width="200" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+            <Button Content=" Nueva carpeta " Command="{Binding CrearCarpetaComando}" Margin="10,0,0,0"/>
+            <StackPanel Margin="5,0,0,0">
+                <Button Content=" Nuevo archivo " Command="{Binding CrearArchivoComando}"/>
+                <ComboBox ItemsSource="{Binding TiposArchivoDisponibles}" SelectedItem="{Binding TipoArchivoSeleccionado, Mode=TwoWay}" Margin="0,3,0,0" ToolTip="Tipo de archivo a crear"/>
+            </StackPanel>
+            <Button Content=" Renombrar seleccionado " Command="{Binding RenombrarComando}" Margin="5,0,0,0"/>
+            <Button Content=" Eliminar seleccionado " Command="{Binding EliminarComando}" Margin="5,0,0,0"/>
+            <TextBlock Text="{Binding MensajeEstado}" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="DarkBlue"/>
+        </StackPanel>
+
+        <!-- 3. VISTA PRINCIPAL DE ARCHIVOS Y CARPETAS -->
+        <DataGrid Grid.Row="3" ItemsSource="{Binding ElementosActuales}" SelectedItem="{Binding ElementoSeleccionado, Mode=TwoWay}"
+                  AutoGenerateColumns="False" IsReadOnly="True" 
+                  GridLinesVisibility="Horizontal" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="350"/>
+                <DataGridTextColumn Header="Tipo" Binding="{Binding EsCarpeta}" Width="100"/>
+                <DataGridTextColumn Header="Tamaño" Binding="{Binding TamanoFormateado}" Width="120"/>
+                <DataGridTextColumn Header="Fecha de Modificación" Binding="{Binding FechaModificacion}" Width="200"/>
+            </DataGrid.Columns>
+            <!-- Doble clic para abrir subcarpetas -->
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="Fila_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+        </DataGrid>
+
+    </Grid>
+</Window>
