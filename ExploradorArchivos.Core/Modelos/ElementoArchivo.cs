@@ -18,8 +18,6 @@ namespace ExploradorArchivos.Core.Modelos
         {
             get
             {
-                if (EsCarpeta) return "--";
-
                 double kb = TamanoBytes / 1024.0;
                 if (kb < 1024) return $"{kb:N1} KB";
 
